@@ -1,0 +1,34 @@
+version: "3.8"
+
+volumes:
+  prometheus-data: {}
+  grafana-data: {}
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "80:3000"
+    restart: unless-stopped
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  # your_job_name:
+  #   image: your_image
+  #   container_name: your_container_name
+  #   ports:
+  #     - "your_port_out:your_port_in"
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./config/your_config/your_config.yml:/your_config_path/your_config.yml:ro
